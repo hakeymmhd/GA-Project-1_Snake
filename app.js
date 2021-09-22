@@ -39,6 +39,7 @@ $(() => {
           
     }
     const snake1 = new Reptile('Player1', 'red', 10, 0);
+    const snake2 = new Reptile('Player2', 'yellow', 10 , 10);
 
     const clearCanvas = () => {        // removes the deleted tail from snake's array of objects
         context.fillStyle = 'white';
@@ -65,6 +66,9 @@ $(() => {
                 clearCanvas();
                 snake1.move_snake();
                 snake1.drawSnake();
+
+                snake2.move_snake();
+                snake2.drawSnake();
                 main();
             }, 100) 
         }
