@@ -3,21 +3,25 @@ console.log("links established");
 $(() => {
     const canvas = document.getElementById("canvas1");
     const context = canvas.getContext("2d");
-    let changing_direction = false;
+//    let changing_direction = false;
 
     class Reptile {
-        constructor(name, color, dx, dy) {
+        constructor(name, color, dx, dy, changing_direction) {
             this.name = name;
             this.color = color;
-            this.dx = dx;
-            this.dy = dy;
+            this.dx = dx;           // snake horizontal movement
+            this.dy = dy;           // snake vertical movement
+            this.changing_direction = changing_direction;
     
             this.body = [           // each player starts with body length 5
-              {x: 200, y: 200},
+              {x: 200, y: 200},     // starts snake at middle of 400x400 canvas
               {x: 190, y: 200},
               {x: 180, y: 200},
               {x: 170, y: 200},
               {x: 160, y: 200},
+            //   {x: 150, y: 200},
+            //   {x: 140, y: 200},
+            //   {x: 130, y: 200},
             ];
           }
 
@@ -38,21 +42,21 @@ $(() => {
           }
 
           changeDirection(event) {    // need to put this in class and have sep dy/dx
-            console.log('KEY PRESSED!');
-            console.log(event.key);
+            // console.log('KEY PRESSED!');
+            // console.log(event.key);
                 
-            if (changing_direction) return;   // dont allow reverse direction
-            console.log('test here');
+            if (this.changing_direction) return;   // dont allow reverse direction
+            // console.log('test here');
             
-            console.log(this.keyDown);
-            changing_direction = true;
+            // console.log(this.keyDown);
+            this.changing_direction = true;
             const keyPressed = event.key;
-            console.log(this);
+            // console.log(this);
             const goingUp = this.dy === -10;    // boolean flag equating to true. axis downwards +ve
             const goingDown = this.dy === 10;
             const goingRight = this.dx === 10;
             const goingLeft = this.dx === -10;
-            if (keyPressed === 'ArrowLeft' && !goingRight) {
+            if (keyPressed === 'ArrowLeft' && !goingRight) {    // ! condition prevents reverse dir
                 this.dx = -10;
                 this.dy = 0;
             }
@@ -65,14 +69,14 @@ $(() => {
                 this.dy = 0;
             }
             if (keyPressed === 'ArrowDown' && !goingUp) {
-              console.log('TURN DOWN NOW!');
+            //   console.log('TURN DOWN NOW!');
                 this.dx = 0;
                 this.dy = 10;
             }
         }
     }
-    const snake1 = new Reptile('Player1', 'red', 10, 0);
-    const snake2 = new Reptile('Player2', 'yellow', 10 , 10);
+    const snake1 = new Reptile('Player1', 'red', 10, 0, false);
+    const snake2 = new Reptile('Player2', 'yellow', 10 , 10, false);
 
     const clearCanvas = () => {        // removes the deleted tail from snake's array of objects
         context.fillStyle = 'white';
@@ -94,6 +98,7 @@ $(() => {
 
     document.addEventListener("keydown", (e) => {
         snake1.changeDirection(e);
+        snake1.changing_direction = false;     // resets flag after each dir change for subsequent changes
       });
 
     const main = () => {
@@ -110,7 +115,7 @@ $(() => {
                 main();
             }, 100) 
         }
-        changing_direction = false;     // resets flag after each dir change
+        
 
     }
 
