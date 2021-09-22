@@ -30,5 +30,14 @@ $(() => {
             });
           }
     }
+    const snake1 = new Reptile('Player1', 'red', 10, 0);
 
+    function main() {
+        setTimeout(() => {
+            snake1.drawSnake();
+            main();
+        }, 100) 
+    }
+
+    main();
 })
