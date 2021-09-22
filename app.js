@@ -97,11 +97,21 @@ $(() => {
 
             }
             if (keyPressed === 's' && !goingUp) {
-            //   console.log('TURN DOWN NOW!');
                 this.dx = 0;
                 this.dy = 10;
             }
         }
+
+        gameStatusFlag() {
+            for (let i = 1; i < this.body.length; i++) {  // check for self-collision
+                if (this.body[i].x === this.body[0].x && this.body[i].y === this.body[0].y) return true  //checks if snake has hit itself
+            }
+            const leftLimit = this.body[0].x < 0;     // creates flag and returns it
+            const rightLimit = this.body[0].x > canvas.width - 10;
+            const topLimit = this.body[0].y < 0;
+            const bottomLimit = this.body[0].y > canvas.height - 10;
+            return leftLimit || rightLimit || topLimit || bottomLimit
+        }   
     }
     const snake1 = new Reptile('Player1', 'red', 10, 0, false);
     const snake2 = new Reptile('Player2', 'yellow', 10 , 10, false);
@@ -113,16 +123,16 @@ $(() => {
         context.strokeRect(0, 0, canvas.width, canvas.height);
       }
 
-    const gameStatusFlag = () => {
-        for (let i = 1; i < snake1.body.length; i++) {  // check for self-collision
-            if (snake1.body[i].x === snake1.body[0].x && snake1.body[i].y === snake1.body[0].y) return true  //checks if snake has hit itself
-        }
-        const leftLimit = snake1.body[0].x < 0;     // creates flag and returns it
-        const rightLimit = snake1.body[0].x > canvas.width - 10;
-        const topLimit = snake1.body[0].y < 0;
-        const bottomLimit = snake1.body[0].y > canvas.height - 10;
-        return leftLimit || rightLimit || topLimit || bottomLimit
-    }   
+    // const gameStatusFlag = () => {
+    //     for (let i = 1; i < snake1.body.length; i++) {  // check for self-collision
+    //         if (snake1.body[i].x === snake1.body[0].x && snake1.body[i].y === snake1.body[0].y) return true  //checks if snake has hit itself
+    //     }
+    //     const leftLimit = snake1.body[0].x < 0;     // creates flag and returns it
+    //     const rightLimit = snake1.body[0].x > canvas.width - 10;
+    //     const topLimit = snake1.body[0].y < 0;
+    //     const bottomLimit = snake1.body[0].y > canvas.height - 10;
+    //     return leftLimit || rightLimit || topLimit || bottomLimit
+    // }   
 
     document.addEventListener("keydown", (e) => {
         snake1.changeDirection1(e);
@@ -135,7 +145,7 @@ $(() => {
     });
 
     const main = () => {
-        if (gameStatusFlag()) return;
+        if (snake1.gameStatusFlag() || snake2.gameStatusFlag()) return;
         
         else {
             setTimeout(() => {
