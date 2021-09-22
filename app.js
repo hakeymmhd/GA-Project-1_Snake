@@ -29,11 +29,18 @@ $(() => {
               context.strokeRect(cb.x, cb.y, 10, 10);
             });
           }
+
+          move_snake() {
+            const addHead = {x: this.body[0].x + this.dx, y: this.body[0].y + this.dy};
+            this.body.unshift(addHead);
+            this.body.pop();
+          }
     }
     const snake1 = new Reptile('Player1', 'red', 10, 0);
 
     function main() {
         setTimeout(() => {
+            snake1.move_snake();
             snake1.drawSnake();
             main();
         }, 100) 
