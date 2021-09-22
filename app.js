@@ -32,14 +32,24 @@ $(() => {
 
           move_snake() {
             const addHead = {x: this.body[0].x + this.dx, y: this.body[0].y + this.dy};
-            this.body.unshift(addHead);
+            this.body.unshift(addHead);  // prepends new head in front of body and then removes the tail end
             this.body.pop();
           }
+
+          
     }
     const snake1 = new Reptile('Player1', 'red', 10, 0);
 
+    function clearCanvas() {        // removes the deleted tail from snake's array of objects
+        context.fillStyle = 'white';
+        context.strokestyle = 'black';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.strokeRect(0, 0, canvas.width, canvas.height);
+      }
+
     function main() {
         setTimeout(() => {
+            clearCanvas();
             snake1.move_snake();
             snake1.drawSnake();
             main();
