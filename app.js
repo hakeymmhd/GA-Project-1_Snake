@@ -41,7 +41,7 @@ $(() => {
             this.body.pop();
           }
 
-          changeDirection(event) {    // need to put this in class and have sep dy/dx
+          changeDirection1(event) {    // need to put this in class and have sep dy/dx
             // console.log('KEY PRESSED!');
             // console.log(event.key);
                 
@@ -74,6 +74,34 @@ $(() => {
                 this.dy = 10;
             }
         }
+
+        changeDirection2(event) {    // for player 2
+            if (this.changing_direction) return;   // dont allow reverse direction
+            this.changing_direction = true;
+            const keyPressed = event.key;
+            const goingUp = this.dy === -10;    // boolean flag equating to true. axis downwards +ve
+            const goingDown = this.dy === 10;
+            const goingRight = this.dx === 10;
+            const goingLeft = this.dx === -10;
+            if (keyPressed === 'a' && !goingRight) {    // ! condition prevents reverse dir
+                this.dx = -10;
+                this.dy = 0;
+            }
+            if (keyPressed === 'w' && !goingDown) {
+                this.dx = 0;
+                this.dy = -10;
+            }
+            if (keyPressed === 'd' && !goingLeft) {
+                this.dx = 10;
+                this.dy = 0;
+
+            }
+            if (keyPressed === 's' && !goingUp) {
+            //   console.log('TURN DOWN NOW!');
+                this.dx = 0;
+                this.dy = 10;
+            }
+        }
     }
     const snake1 = new Reptile('Player1', 'red', 10, 0, false);
     const snake2 = new Reptile('Player2', 'yellow', 10 , 10, false);
@@ -97,9 +125,14 @@ $(() => {
     }   
 
     document.addEventListener("keydown", (e) => {
-        snake1.changeDirection(e);
+        snake1.changeDirection1(e);
         snake1.changing_direction = false;     // resets flag after each dir change for subsequent changes
       });
+
+    document.addEventListener("keydown", (e) => {
+        snake2.changeDirection2(e);
+        snake2.changing_direction = false;     // resets flag after each dir change for subsequent changes
+    });
 
     const main = () => {
         if (gameStatusFlag()) return;
