@@ -3,6 +3,7 @@ console.log("links established");
 $(() => {
     const canvas = document.getElementById("canvas1");
     const context = canvas.getContext("2d");
+    let changing_direction = false;
 
     class Reptile {
         constructor(name, color, dx, dy) {
@@ -36,7 +37,39 @@ $(() => {
             this.body.pop();
           }
 
-          
+          changeDirection(event) {    // need to put this in class and have sep dy/dx
+            console.log('KEY PRESSED!');
+            console.log(event.key);
+                
+            if (changing_direction) return;   // dont allow reverse direction
+            console.log('test here');
+            
+            console.log(this.keyDown);
+            changing_direction = true;
+            const keyPressed = event.key;
+            console.log(this);
+            const goingUp = this.dy === -10;    // boolean flag equating to true. axis downwards +ve
+            const goingDown = this.dy === 10;
+            const goingRight = this.dx === 10;
+            const goingLeft = this.dx === -10;
+            if (keyPressed === 'ArrowLeft' && !goingRight) {
+                this.dx = -10;
+                this.dy = 0;
+            }
+            if (keyPressed === 'ArrowUp' && !goingDown) {
+                this.dx = 0;
+                this.dy = -10;
+            }
+            if (keyPressed === 'ArrowRight' && !goingLeft) {
+                this.dx = 10;
+                this.dy = 0;
+            }
+            if (keyPressed === 'ArrowDown' && !goingUp) {
+              console.log('TURN DOWN NOW!');
+                this.dx = 0;
+                this.dy = 10;
+            }
+        }
     }
     const snake1 = new Reptile('Player1', 'red', 10, 0);
     const snake2 = new Reptile('Player2', 'yellow', 10 , 10);
@@ -59,8 +92,13 @@ $(() => {
         return leftLimit || rightLimit || topLimit || bottomLimit
     }   
 
+    document.addEventListener("keydown", (e) => {
+        snake1.changeDirection(e);
+      });
+
     const main = () => {
         if (gameStatusFlag()) return;
+        
         else {
             setTimeout(() => {
                 clearCanvas();
@@ -72,7 +110,7 @@ $(() => {
                 main();
             }, 100) 
         }
-
+        changing_direction = false;     // resets flag after each dir change
 
     }
 
