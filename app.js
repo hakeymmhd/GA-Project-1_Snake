@@ -40,20 +40,36 @@ $(() => {
     }
     const snake1 = new Reptile('Player1', 'red', 10, 0);
 
-    function clearCanvas() {        // removes the deleted tail from snake's array of objects
+    const clearCanvas = () => {        // removes the deleted tail from snake's array of objects
         context.fillStyle = 'white';
         context.strokestyle = 'black';
         context.fillRect(0, 0, canvas.width, canvas.height);
         context.strokeRect(0, 0, canvas.width, canvas.height);
       }
 
-    function main() {
-        setTimeout(() => {
-            clearCanvas();
-            snake1.move_snake();
-            snake1.drawSnake();
-            main();
-        }, 100) 
+    const gameStatusFlag = () => {
+        for (let i = 1; i < snake1.body.length; i++) {  // check for self-collision
+            if (snake1.body[i].x === snake1.body[0].x && snake1.body[i].y === snake1.body[0].y) return true  //checks if snake has hit itself
+        }
+        const leftLimit = snake1.body[0].x < 0;     // creates flag and returns it
+        const rightLimit = snake1.body[0].x > canvas.width - 10;
+        const topLimit = snake1.body[0].y < 0;
+        const bottomLimit = snake1.body[0].y > canvas.height - 10;
+        return leftLimit || rightLimit || topLimit || bottomLimit
+    }   
+
+    const main = () => {
+        if (gameStatusFlag()) return;
+        else {
+            setTimeout(() => {
+                clearCanvas();
+                snake1.move_snake();
+                snake1.drawSnake();
+                main();
+            }, 100) 
+        }
+
+
     }
 
     main();
