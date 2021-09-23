@@ -6,13 +6,18 @@ $(() => {
 //    let changing_direction = false;
 
     class Reptile {
-        constructor(name, color, dx, dy, changing_direction) {
+        constructor(name, color, dx, dy, changing_direction, left, up, right, down) {
             this.name = name;
             this.color = color;
             this.dx = dx;           // snake horizontal movement
             this.dy = dy;           // snake vertical movement
-            this.changing_direction = changing_direction;
-    
+            this.changing_direction = changing_direction; // for resetting flag after each dir change for subsequent changes
+            
+            this.goLeft = left;
+            this.goUp = up;
+            this.goRight = right;
+            this.goDown = down;
+            
             this.body = [           // each player starts with body length 5
               {x: 200, y: 200},     // starts snake at middle of 400x400 canvas
               {x: 190, y: 200},
@@ -41,7 +46,7 @@ $(() => {
             this.body.pop();
           }
 
-          changeDirection1(event) {    // need to put this in class and have sep dy/dx
+          changeDirection(event) {    
             // console.log('KEY PRESSED!');
             // console.log(event.key);
                 
@@ -56,53 +61,53 @@ $(() => {
             const goingDown = this.dy === 10;
             const goingRight = this.dx === 10;
             const goingLeft = this.dx === -10;
-            if (keyPressed === 'ArrowLeft' && !goingRight) {    // ! condition prevents reverse dir
+            if (keyPressed === this.goLeft && !goingRight) {    // ! condition prevents reverse dir
                 this.dx = -10;
                 this.dy = 0;
             }
-            if (keyPressed === 'ArrowUp' && !goingDown) {
+            if (keyPressed === this.goUp && !goingDown) {
                 this.dx = 0;
                 this.dy = -10;
             }
-            if (keyPressed === 'ArrowRight' && !goingLeft) {
+            if (keyPressed === this.goRight && !goingLeft) {
                 this.dx = 10;
                 this.dy = 0;
             }
-            if (keyPressed === 'ArrowDown' && !goingUp) {
+            if (keyPressed === this.goDown && !goingUp) {
             //   console.log('TURN DOWN NOW!');
                 this.dx = 0;
                 this.dy = 10;
             }
         }
 
-        changeDirection2(event) {    // for player 2
-            if (this.changing_direction) return;   // dont allow reverse direction
-            this.changing_direction = true;
-            const keyPressed = event.key;
-            const goingUp = this.dy === -10;    // boolean flag equating to true. axis downwards +ve
-            const goingDown = this.dy === 10;
-            const goingRight = this.dx === 10;
-            const goingLeft = this.dx === -10;
-            if (keyPressed === 'a' && !goingRight) {    // ! condition prevents reverse dir
-                this.dx = -10;
-                this.dy = 0;
-            }
-            if (keyPressed === 'w' && !goingDown) {
-                this.dx = 0;
-                this.dy = -10;
-            }
-            if (keyPressed === 'd' && !goingLeft) {
-                this.dx = 10;
-                this.dy = 0;
+        // changeDirection2(event) {    // for player 2
+        //     if (this.changing_direction) return;   // dont allow reverse direction
+        //     this.changing_direction = true;
+        //     const keyPressed = event.key;
+        //     const goingUp = this.dy === -10;    // boolean flag equating to true. axis downwards +ve
+        //     const goingDown = this.dy === 10;
+        //     const goingRight = this.dx === 10;
+        //     const goingLeft = this.dx === -10;
+        //     if (keyPressed === 'a' && !goingRight) {    // ! condition prevents reverse dir
+        //         this.dx = -10;
+        //         this.dy = 0;
+        //     }
+        //     if (keyPressed === 'w' && !goingDown) {
+        //         this.dx = 0;
+        //         this.dy = -10;
+        //     }
+        //     if (keyPressed === 'd' && !goingLeft) {
+        //         this.dx = 10;
+        //         this.dy = 0;
+        //     }
+        //     if (keyPressed === 's' && !goingUp) {
+        //         this.dx = 0;
+        //         this.dy = 10;
+        //     }
+        // }
 
-            }
-            if (keyPressed === 's' && !goingUp) {
-                this.dx = 0;
-                this.dy = 10;
-            }
-        }
-
-        gameStatusFlag() {
+        gameStatusFlag() {  // figure how to implement inter-player collision detection 
+                            // maybe a for loop outside the class and check snake1.body[0] against all of snake2.body
             for (let i = 1; i < this.body.length; i++) {  // check for self-collision
                 if (this.body[i].x === this.body[0].x && this.body[i].y === this.body[0].y) return true  //checks if snake has hit itself
             }
@@ -113,8 +118,8 @@ $(() => {
             return leftLimit || rightLimit || topLimit || bottomLimit
         }   
     }
-    const snake1 = new Reptile('Player1', 'red', 10, 0, false);
-    const snake2 = new Reptile('Player2', 'yellow', 10 , 10, false);
+    const snake1 = new Reptile('Player1', 'red', 10, 0, false, 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown');
+    const snake2 = new Reptile('Player2', 'yellow', 10 , 10, false, 'a', 'w', 'd', 's');
 
     const clearCanvas = () => {        // removes the deleted tail from snake's array of objects
         context.fillStyle = 'white';
@@ -123,24 +128,13 @@ $(() => {
         context.strokeRect(0, 0, canvas.width, canvas.height);
       }
 
-    // const gameStatusFlag = () => {
-    //     for (let i = 1; i < snake1.body.length; i++) {  // check for self-collision
-    //         if (snake1.body[i].x === snake1.body[0].x && snake1.body[i].y === snake1.body[0].y) return true  //checks if snake has hit itself
-    //     }
-    //     const leftLimit = snake1.body[0].x < 0;     // creates flag and returns it
-    //     const rightLimit = snake1.body[0].x > canvas.width - 10;
-    //     const topLimit = snake1.body[0].y < 0;
-    //     const bottomLimit = snake1.body[0].y > canvas.height - 10;
-    //     return leftLimit || rightLimit || topLimit || bottomLimit
-    // }   
-
     document.addEventListener("keydown", (e) => {
-        snake1.changeDirection1(e);
+        snake1.changeDirection(e);
         snake1.changing_direction = false;     // resets flag after each dir change for subsequent changes
       });
 
     document.addEventListener("keydown", (e) => {
-        snake2.changeDirection2(e);
+        snake2.changeDirection(e);
         snake2.changing_direction = false;     // resets flag after each dir change for subsequent changes
     });
 

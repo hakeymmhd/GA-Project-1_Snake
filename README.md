@@ -20,3 +20,4 @@ good to have:
 Wishlist:
 - "I'm feeling brave" option with Halloween style jump scare on random points
 - console toggle appended on DOM
+- customisable controls
