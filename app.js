@@ -3,7 +3,9 @@ console.log("links established");
 $(() => {
     const canvas = document.getElementById("canvas1");
     const context = canvas.getContext("2d");
-//    let changing_direction = false;
+    let food_x = 200;
+    let food_y = 200; 
+    let foodFlag = false;
 
     class Reptile {
         constructor(name, color, dx, dy, changing_direction, left, up, right, down) {
@@ -43,7 +45,14 @@ $(() => {
           move_snake() {
             const addHead = {x: this.body[0].x + this.dx, y: this.body[0].y + this.dy};
             this.body.unshift(addHead);  // prepends new head in front of body and then removes the tail end
-            this.body.pop();
+            console.log(`${food_x} - ${food_y}`);
+            if (this.body[0].x === food_x && this.body[0].y === food_y) {
+                foodGen(this);
+            } else {
+                this.body.pop();
+            }
+            
+            
           }
 
           changeDirection(event) {    
@@ -80,32 +89,6 @@ $(() => {
             }
         }
 
-        // changeDirection2(event) {    // for player 2
-        //     if (this.changing_direction) return;   // dont allow reverse direction
-        //     this.changing_direction = true;
-        //     const keyPressed = event.key;
-        //     const goingUp = this.dy === -10;    // boolean flag equating to true. axis downwards +ve
-        //     const goingDown = this.dy === 10;
-        //     const goingRight = this.dx === 10;
-        //     const goingLeft = this.dx === -10;
-        //     if (keyPressed === 'a' && !goingRight) {    // ! condition prevents reverse dir
-        //         this.dx = -10;
-        //         this.dy = 0;
-        //     }
-        //     if (keyPressed === 'w' && !goingDown) {
-        //         this.dx = 0;
-        //         this.dy = -10;
-        //     }
-        //     if (keyPressed === 'd' && !goingLeft) {
-        //         this.dx = 10;
-        //         this.dy = 0;
-        //     }
-        //     if (keyPressed === 's' && !goingUp) {
-        //         this.dx = 0;
-        //         this.dy = 10;
-        //     }
-        // }
-
         gameStatusFlag() {  // figure how to implement inter-player collision detection 
                             // maybe a for loop outside the class and check snake1.body[0] against all of snake2.body
             for (let i = 1; i < this.body.length; i++) {  // check for self-collision
@@ -118,6 +101,11 @@ $(() => {
             return leftLimit || rightLimit || topLimit || bottomLimit
         }   
     }
+
+    class Game {
+        
+    }
+
     const snake1 = new Reptile('Player1', 'red', 10, 0, false, 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown');
     const snake2 = new Reptile('Player2', 'yellow', 10 , 10, false, 'a', 'w', 'd', 's');
 
@@ -127,6 +115,28 @@ $(() => {
         context.fillRect(0, 0, canvas.width, canvas.height);
         context.strokeRect(0, 0, canvas.width, canvas.height);
       }
+
+    const randomGen = (min, max) => {
+        return Math.round((Math.random() * (max - min) + min) / 10) * 10;
+    }
+    const drawFood = () => {
+        context.fillStyle = 'green';
+        context.strokestyle = 'black';
+        context.fillRect(food_x, food_y, 10, 10);
+        context.strokeRect(food_x, food_y, 10, 10);
+    }
+
+    const foodGen = (obj) => {
+        food_x = randomGen(0, canvas.width - 10);
+        food_y = randomGen(0, canvas.height - 10);
+        obj.body.forEach((cb1) => {
+            if (cb1.x === food_x && cb1.y === food_y) foodGen();
+        });
+        
+        obj.body.forEach((cb2) => {
+            if (cb2.x === food_x && cb2.y === food_y) foodGen();
+        });
+    }
 
     document.addEventListener("keydown", (e) => {
         snake1.changeDirection(e);
@@ -144,6 +154,8 @@ $(() => {
         else {
             setTimeout(() => {
                 clearCanvas();
+                drawFood(snake1, snake2);
+                
                 snake1.move_snake();
                 snake1.drawSnake();
 
