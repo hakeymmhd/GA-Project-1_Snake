@@ -5,7 +5,7 @@ A 2D snake game
 Minimum features:
 - Snake only operates in canvas boundary (done)
 - Game ends when snake hits canvas boundary or itself (or collides with Player 2) (done)
-- Score counter
+- Score counter (done)
 - Snake body gets longer with each point (done)
 - Start and pause game with spacebar 
 
