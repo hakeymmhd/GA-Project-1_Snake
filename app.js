@@ -3,9 +3,9 @@ console.log("links established");
 $(() => {
     const canvas = document.getElementById("canvas1");
     const context = canvas.getContext("2d");
-    let food_x = 200;
-    let food_y = 200; 
-    let foodFlag = false;
+    let food_x = 300;
+    let food_y = 300; 
+    
 
     class Reptile {
         constructor(name, color, dx, dy, changing_direction, left, up, right, down, oriX, oriY) {
@@ -31,14 +31,14 @@ $(() => {
             //   {x: 130, y: 200},
             ];
           }
-
+ß
           drawSnake() {
             //console.log(this);
             this.body.forEach((cb) => {
               context.fillStyle = this.color;       // diff colors for each player
               context.strokestyle = 'black';
               context.fillRect(cb.x, cb.y, 10, 10);
-              context.strokeRect(cb.x, cb.y, 10, 10);
+              context.strokeRect(cb.x, cb.y, 10 , 10);
             });
           }
 
@@ -117,7 +117,7 @@ $(() => {
     }
 
     const snake1 = new Reptile('Player1', 'red', 10, 0, false, 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown', 200, 200);
-    const snake2 = new Reptile('Player2', 'yellow', 10 , 10, false, 'a', 'w', 'd', 's', 100, 100);
+    const snake2 = new Reptile('Player2', 'yellow', 10 , 0, false, 'a', 'w', 'd', 's', 100, 100);
 
     const clearCanvas = () => {        // removes the deleted tail from snake's array of objects
         context.fillStyle = 'white';
@@ -158,7 +158,18 @@ $(() => {
         snake2.changing_direction = false;     // resets flag after each dir change for subsequent changes
     });
 
-    const main = () => {
+    const singlePl = document.getElementById("singlePlayer");
+    const multiPl = document.getElementById("multiPlayer");
+    singlePl.addEventListener("click", () => {
+        singleMode();
+        console.log("single mode clicked");
+    });
+    multiPl.addEventListener("click", () => {
+        multiMode();
+        console.log("Multiplayer mode clicked");
+    });
+
+    const multiMode = () => {
         // console.log(snake1.getSnakePos());
         if (snake1.gameStatusFlag(snake2.getSnakePos()) || snake2.gameStatusFlag(snake1.getSnakePos())) return;
         
@@ -172,12 +183,26 @@ $(() => {
 
                 snake2.move_snake();
                 snake2.drawSnake();
-                main();
+                multiMode();
             }, 100) 
         }
-        
-
     }
 
-    main();
+    // multiMode();
+
+    const singleMode = () => {
+        if (snake1.gameStatusFlag(snake2.getSnakePos())) return;
+
+        else {
+            setTimeout(() => {
+                clearCanvas();
+                drawFood(snake1);
+                
+                snake1.move_snake();
+                snake1.drawSnake();
+                singleMode();
+            }, 100) 
+        }
+    }
+    // singleMode();
 })
