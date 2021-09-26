@@ -14,7 +14,8 @@ $(() => {
             this.dx = dx;           // snake horizontal movement
             this.dy = dy;           // snake vertical movement
             this.changing_direction = changing_direction; // for resetting flag after each dir change for subsequent changes
-            
+            this.score = 0;
+
             this.goLeft = left;
             this.goUp = up;
             this.goRight = right;
@@ -31,7 +32,7 @@ $(() => {
             //   {x: 130, y: 200},
             ];
           }
-ß
+
           drawSnake() {
             //console.log(this);
             this.body.forEach((cb) => {
@@ -48,6 +49,8 @@ $(() => {
             // console.log(`${food_x} - ${food_y}`);
             if (this.body[0].x === food_x && this.body[0].y === food_y) {
                 foodGen(this);
+                this.score += 10;
+               document.getElementById(`${this.name}`).innerHTML = this.getScore();
             } else {
                 this.body.pop();
             }
@@ -107,8 +110,18 @@ $(() => {
             return leftLimit || rightLimit || topLimit || bottomLimit
         }   
 
-        getSnakePos () {
+        getSnakePos() {
             return this.body;
+        }
+
+        createScore() {
+            let playerTag = $('<p>').text(`${this.name}`);
+            let p1 = $('<p>').attr('id', `${this.name}`);
+            $('#Score').append(playerTag, p1);
+        } 
+        
+        getScore () {
+            return this.score;
         }
     }
 
@@ -160,11 +173,16 @@ $(() => {
 
     const singlePl = document.getElementById("singlePlayer");
     const multiPl = document.getElementById("multiPlayer");
+
     singlePl.addEventListener("click", () => {
+        snake1.createScore();
         singleMode();
         console.log("single mode clicked");
     });
+
     multiPl.addEventListener("click", () => {
+        snake1.createScore();
+        snake2.createScore();
         multiMode();
         console.log("Multiplayer mode clicked");
     });
@@ -203,6 +221,8 @@ $(() => {
                 singleMode();
             }, 100) 
         }
+        
+
     }
     // singleMode();
 })
