@@ -169,8 +169,6 @@ $(() => {
     });
 
     document.addEventListener("keydown", (e) => {
- 
-
         if (e.code === 'Space') {
             if (snake1.pauseFlag === false) {
                 snake1.pauseFlag = true;
@@ -198,50 +196,42 @@ $(() => {
         console.log("Multiplayer mode clicked");
     });
 
-    // const multiMode = () => {
-    //     // console.log(snake1.getSnakePos());
-    //     if (snake1.gameStatusFlag(snake2.getSnakePos()) || snake2.gameStatusFlag(snake1.getSnakePos())) return;
+    const multiMode = () => {
+        // console.log(snake1.getSnakePos());
+        if (snake1.gameStatusFlag(snake2.getSnakePos()) || snake2.gameStatusFlag(snake1.getSnakePos())) return;
         
-    //     else {
-    //         setTimeout(() => {
-    //             clearCanvas();
-    //             drawFood(snake1, snake2);
+        else {
+            setTimeout(() => {
+                clearCanvas();
+                drawFood(snake1, snake2);
                 
-    //             snake1.move_snake();
-    //             snake1.drawSnake();
+                snake1.move_snake();
+                snake1.drawSnake();
 
-    //             snake2.move_snake();
-    //             snake2.drawSnake();
-    //             multiMode();
-    //         }, 100) 
-    //     }
-    // }
+                snake2.move_snake();
+                snake2.drawSnake();
+                multiMode();
+            }, 100) 
+        }
+    }
 
-    // // multiMode();
+    // multiMode();
 
-    // const singleMode = () => {
-    //     if (snake1.gameStatusFlag(snake2.getSnakePos())) return;
-    //     if (!snake1.pauseFlag) return;
-    //     else {
-    //         setTimeout(() => {
-    //             clearCanvas();
-    //             drawFood(snake1);
+    const singleMode = () => {
+        if (snake1.gameStatusFlag(snake2.getSnakePos())) return;
+        if (!snake1.pauseFlag) return;
+        else {
+            setTimeout(() => {
+                clearCanvas();
+                drawFood(snake1);
                 
-    //             snake1.move_snake();
-    //             snake1.drawSnake();
-    //             singleMode();
-    //         }, 80) 
-    //     }
+                snake1.move_snake();
+                snake1.drawSnake();
+                singleMode();
+            }, 80) 
+        }
         
 
-    // }
-    // // singleMode();
-    
-    setInterval(() => {
-        $('#time-display').text(sec);
-       // console.log(sec);
-        sec++;
-    }, 1000);
-
-    
+    }
+    // singleMode();
 })
