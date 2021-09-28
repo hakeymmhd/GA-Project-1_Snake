@@ -21,3 +21,9 @@ Wishlist:
 - "I'm feeling brave" option with Halloween style jump scare on random points
 - console toggle appended on DOM
 - customisable controls
+
+-*-*-*-*-
+Learning points:
+- setTimeout does not work very well possibly because it involves recurring the host function. 
+- requestAnimationFrame is hard to implement to control the speed while matching corresponding food square size and location
+- setInterval eliminates program hang problem

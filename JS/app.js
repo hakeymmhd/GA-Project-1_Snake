@@ -5,6 +5,7 @@ $(() => {
     const context = canvas.getContext("2d");
     let food_x = 300;
     let food_y = 300; 
+    let pauseFlag = false;
     
 
     class Reptile {
@@ -15,7 +16,7 @@ $(() => {
             this.dy = dy;           // snake vertical movement
             this.changing_direction = changing_direction; // for resetting flag after each dir change for subsequent changes
             this.score = 0;
-            this.pauseFlag = false;
+            // this.pauseFlag = false;
 
             this.goLeft = left;
             this.goUp = up;
@@ -92,7 +93,20 @@ $(() => {
             }
         }
 
-        gameStatusFlag(competitor) {  // figure how to implement inter-player collision detection 
+        gameStatusFlag() {  // figure how to implement inter-player collision detection 
+            // maybe a for loop outside the class and check snake1.body[0] against all of snake2.body
+            for (let i = 3; i < this.body.length; i++) {  // check for self-collision
+             if (this.body[i].x === this.body[0].x && this.body[i].y === this.body[0].y) return true  //checks if snake has hit itself
+            }
+
+            const leftLimit = this.body[0].x < 0;     // creates flag and returns it
+            const rightLimit = this.body[0].x > canvas.width - 10;
+            const topLimit = this.body[0].y < 0;
+            const bottomLimit = this.body[0].y > canvas.height - 10;
+            return leftLimit || rightLimit || topLimit || bottomLimit
+        }   
+
+        gameStatusFlag_Multi(competitor) {  // figure how to implement inter-player collision detection 
                             // maybe a for loop outside the class and check snake1.body[0] against all of snake2.body
             for (let i = 3; i < this.body.length; i++) {  // check for self-collision
                 if (this.body[i].x === this.body[0].x && this.body[i].y === this.body[0].y) return true  //checks if snake has hit itself
@@ -170,12 +184,12 @@ $(() => {
 
     document.addEventListener("keydown", (e) => {
         if (e.code === 'Space') {
-            if (snake1.pauseFlag === false) {
-                snake1.pauseFlag = true;
-                console.log(`false flag is now ${snake1.pauseFlag}`);
+            if (pauseFlag === false) {
+                pauseFlag = true;
+                console.log(`false flag is now ${pauseFlag}`);
             } else {
-                snake1.pauseFlag = false;
-                console.log(`false flag is now ${snake1.pauseFlag}`);
+                pauseFlag = false;
+                console.log(`false flag is now ${pauseFlag}`);
             }
         }
       });
@@ -197,11 +211,10 @@ $(() => {
     });
 
     const multiMode = () => {
-        // console.log(snake1.getSnakePos());
-        if (snake1.gameStatusFlag(snake2.getSnakePos()) || snake2.gameStatusFlag(snake1.getSnakePos())) return;
-        
-        else {
-            setTimeout(() => {
+     
+            setInterval(() => {
+                if (snake1.gameStatusFlag_Multi(snake2.getSnakePos()) || snake2.gameStatusFlag_Multi(snake1.getSnakePos())) return;
+                if (!pauseFlag) return;
                 clearCanvas();
                 drawFood(snake1, snake2);
                 
@@ -210,27 +223,33 @@ $(() => {
 
                 snake2.move_snake();
                 snake2.drawSnake();
-                multiMode();
+             //   multiMode();
             }, 100) 
-        }
+        
     }
 
+    let sec = 0;
     // multiMode();
+    setInterval(() => {
+        $('#time-display').text(sec)
+        sec++;
+    },1000)
 
     const singleMode = () => {
-        if (snake1.gameStatusFlag(snake2.getSnakePos())) return;
-        if (!snake1.pauseFlag) return;
-        else {
-            setTimeout(() => {
-                clearCanvas();
-                drawFood(snake1);
+
+            setInterval(() => {
+                if (snake1.gameStatusFlag()) return;
+                if (pauseFlag) {
+                    clearCanvas();
+                    drawFood(snake1);
+                    
+                    snake1.move_snake();
+                    snake1.drawSnake();
+                }
                 
-                snake1.move_snake();
-                snake1.drawSnake();
-                singleMode();
-            }, 80) 
-        }
-        
+
+             //   singleMode();
+            }, 100) 
 
     }
     // singleMode();
