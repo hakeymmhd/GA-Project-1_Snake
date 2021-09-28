@@ -15,6 +15,7 @@ $(() => {
             this.dy = dy;           // snake vertical movement
             this.changing_direction = changing_direction; // for resetting flag after each dir change for subsequent changes
             this.score = 0;
+            this.pauseFlag = false;
 
             this.goLeft = left;
             this.goUp = up;
@@ -23,10 +24,10 @@ $(() => {
             
             this.body = [           // each player starts with body length 5
               {x: oriX, y: oriY},     // starts snake at middle of 400x400 canvas
-              {x: oriX - 10, y: oriY - 10},
-              {x: oriX - 20, y: oriY - 20},
-              {x: oriX - 30, y: oriY - 30},
-              {x: oriX - 40, y: oriY - 40},
+              {x: oriX - 10, y: oriY},
+              {x: oriX - 20, y: oriY},
+              {x: oriX - 30, y: oriY},
+              {x: oriX - 40, y: oriY},
             //   {x: 150, y: 200},
             //   {x: 140, y: 200},
             //   {x: 130, y: 200},
@@ -44,6 +45,7 @@ $(() => {
           }
 
           move_snake() {
+            
             const addHead = {x: this.body[0].x + this.dx, y: this.body[0].y + this.dy};
             this.body.unshift(addHead);  // prepends new head in front of body and then removes the tail end
             // console.log(`${food_x} - ${food_y}`);
@@ -54,8 +56,6 @@ $(() => {
             } else {
                 this.body.pop();
             }
-            
-            
           }
 
           changeDirection(event) {    
@@ -125,10 +125,6 @@ $(() => {
         }
     }
 
-    class Game {
-        
-    }
-
     const snake1 = new Reptile('Player1', 'red', 10, 0, false, 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown', 200, 200);
     const snake2 = new Reptile('Player2', 'yellow', 10 , 0, false, 'a', 'w', 'd', 's', 100, 100);
 
@@ -142,6 +138,7 @@ $(() => {
     const randomGen = (min, max) => {
         return Math.round((Math.random() * (max - min) + min) / 10) * 10;
     }
+
     const drawFood = () => {
         context.fillStyle = 'green';
         context.strokestyle = 'black';
@@ -170,6 +167,18 @@ $(() => {
         snake2.changeDirection(e);
         snake2.changing_direction = false;     // resets flag after each dir change for subsequent changes
     });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.code === 'Space') {
+            if (snake1.pauseFlag === false) {
+                snake1.pauseFlag = true;
+                console.log(`false flag is now ${snake1.pauseFlag}`);
+            } else {
+                snake1.pauseFlag = false;
+                console.log(`false flag is now ${snake1.pauseFlag}`);
+            }
+        }
+      });
 
     const singlePl = document.getElementById("singlePlayer");
     const multiPl = document.getElementById("multiPlayer");
@@ -210,7 +219,7 @@ $(() => {
 
     const singleMode = () => {
         if (snake1.gameStatusFlag(snake2.getSnakePos())) return;
-
+        if (!snake1.pauseFlag) return;
         else {
             setTimeout(() => {
                 clearCanvas();
@@ -219,7 +228,7 @@ $(() => {
                 snake1.move_snake();
                 snake1.drawSnake();
                 singleMode();
-            }, 100) 
+            }, 80) 
         }
         
 
