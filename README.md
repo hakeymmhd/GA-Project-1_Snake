@@ -7,13 +7,13 @@ Minimum features:
 - Game ends when snake hits canvas boundary or itself (or collides with Player 2) (done)
 - Score counter (done)
 - Snake body gets longer with each point (done)
-- Start and pause game with spacebar 
+- Start game with spacebar (removed pause function as it is difficult to pause a setInterval)
 
 -*-*-*-*-
 good to have: 
 - collision course detection and alert
 - higher levels in form of higher speed
-- varying game modes
+- varying game modes (single & multiplayer game mode done)
 - sound when snake gets a point 
 
 -*-*-*-*-

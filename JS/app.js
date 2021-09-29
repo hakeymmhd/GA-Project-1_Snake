@@ -5,8 +5,8 @@ $(() => {
     const context = canvas.getContext("2d");
     let food_x = 300;
     let food_y = 300; 
-    let pauseFlag = false;
-    
+    let pauseFlag = true;
+    let audio = new Audio('getPoint.wav');
 
     class Reptile {
         constructor(name, color, dx, dy, changing_direction, left, up, right, down, oriX, oriY) {
@@ -51,6 +51,7 @@ $(() => {
             this.body.unshift(addHead);  // prepends new head in front of body and then removes the tail end
             // console.log(`${food_x} - ${food_y}`);
             if (this.body[0].x === food_x && this.body[0].y === food_y) {
+                audio.play();
                 foodGen(this);
                 this.score += 10;
                document.getElementById(`${this.name}`).innerHTML = this.getScore();
@@ -132,6 +133,7 @@ $(() => {
             let playerTag = $('<p>').text(`${this.name}`);
             let p1 = $('<p>').attr('id', `${this.name}`);
             $('#Score').append(playerTag, p1);
+            document.getElementById(`${this.name}`).innerHTML = this.getScore();
         } 
         
         getScore () {
@@ -198,23 +200,25 @@ $(() => {
     const multiPl = document.getElementById("multiPlayer");
 
     singlePl.addEventListener("click", () => {
-        snake1.createScore();
+        
         singleMode();
         console.log("single mode clicked");
     });
 
     multiPl.addEventListener("click", () => {
-        snake1.createScore();
-        snake2.createScore();
+
         multiMode();
         console.log("Multiplayer mode clicked");
     });
 
     const multiMode = () => {
-     
+        if (pauseFlag) return;
+        else {
+            snake1.createScore();
+            snake2.createScore();
             setInterval(() => {
                 if (snake1.gameStatusFlag_Multi(snake2.getSnakePos()) || snake2.gameStatusFlag_Multi(snake1.getSnakePos())) return;
-                if (!pauseFlag) return;
+                
                 clearCanvas();
                 drawFood(snake1, snake2);
                 
@@ -225,6 +229,8 @@ $(() => {
                 snake2.drawSnake();
              //   multiMode();
             }, 100) 
+        }
+        
         
     }
 
@@ -236,21 +242,21 @@ $(() => {
     },1000)
 
     const singleMode = () => {
-
+       
+        if (pauseFlag) return 
+        else {
+            snake1.createScore();
             setInterval(() => {
                 if (snake1.gameStatusFlag()) return;
-                if (pauseFlag) {
-                    clearCanvas();
-                    drawFood(snake1);
-                    
-                    snake1.move_snake();
-                    snake1.drawSnake();
-                }
+                clearCanvas();
+                drawFood(snake1);
                 
-
+                snake1.move_snake();
+                snake1.drawSnake();
+        
              //   singleMode();
             }, 100) 
-
+        }
     }
     // singleMode();
 })
