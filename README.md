@@ -1,5 +1,9 @@
 # GA-Project-1_Snake
-A 2D snake game
+A 2D snake game adapted from the original Nokia mobile game, with an added feature of local multiplayer using a shared keyboard. The goal is to get the snake to eat as many squares as possible without hitting the four walls or itself, or in the case of multiplayer, each other. 
+
+The multiplayer mode can be interpreted as both a competitive and a co-op game mode to test how well a pair of players can work together. 
+
+# Game link: 
 
 -*-*-*-*-
 Minimum features:

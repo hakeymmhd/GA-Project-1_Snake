@@ -245,15 +245,7 @@ $(() => {
                 snake2.drawSnake();
             }, 100) 
         }
-        
-        
     }
-
-    // let sec = 0;
-    // setInterval(() => {
-    //     $('#time-display').text(sec)
-    //     sec++;
-    // },1000)
 
     const singleMode = () => {
         if (pauseFlag) return 
@@ -273,6 +265,5 @@ $(() => {
         
             }, 100) 
         }
-  
     }
 })
