@@ -10,17 +10,17 @@ https://hakeymmhd.github.io/GA-Project-1_Snake/
 - In single player mode, use the arrow keys on the keyboard to control the direction of snake mvoement.
 - In multiplayer mode, use the arrow keys on the keyboard to control Player 1 movement, and W-A-S-D for Player 2 on the same keyboard. 
 
-Player 1:
-Up arrow - Go up
-Left arrow - Go left
-Down arrow - Go down
-Right arrow - Go right
-
-Player 2:
-W - Go up
-A - Go left
-S - Go down
-D - Go right
+Player 1:  
+Up arrow - Go up  
+Left arrow - Go left  
+Down arrow - Go down  
+Right arrow - Go right  
+   
+Player 2:  
+W - Go up  
+A - Go left  
+S - Go down  
+D - Go right  
 
 # Technologies used:
 - HTML
