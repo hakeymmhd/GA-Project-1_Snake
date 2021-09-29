@@ -8,8 +8,8 @@ $(() => {
     let pauseFlag = true;
     let gameMode = 0;
     
-    let audioPoint = new Audio('getPoint.wav');
-    let audioGameOver = new Audio('gameOver.wav');
+    let audioPoint = new Audio('./Audio/getPoint.wav');
+    let audioGameOver = new Audio('./Audio/gameOver.wav');
 
     class Reptile {
         constructor(name, color, dx, dy, changing_direction, left, up, right, down, oriX, oriY) {
