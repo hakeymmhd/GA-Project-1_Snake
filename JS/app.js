@@ -6,6 +6,8 @@ $(() => {
     let food_x = 300;
     let food_y = 300; 
     let pauseFlag = true;
+    let gameMode = 0;
+    
     let audioPoint = new Audio('getPoint.wav');
     let audioGameOver = new Audio('gameOver.wav');
 
@@ -17,7 +19,6 @@ $(() => {
             this.dy = dy;           // snake vertical movement
             this.changing_direction = changing_direction; // for resetting flag after each dir change for subsequent changes
             this.score = 0;
-            // this.pauseFlag = false;
 
             this.goLeft = left;
             this.goUp = up;
@@ -37,7 +38,6 @@ $(() => {
           }
 
           drawSnake() {
-            //console.log(this);
             this.body.forEach((cb) => {
               context.fillStyle = this.color;       // diff colors for each player
               context.strokestyle = 'black';
@@ -50,28 +50,21 @@ $(() => {
             
             const addHead = {x: this.body[0].x + this.dx, y: this.body[0].y + this.dy};
             this.body.unshift(addHead);  // prepends new head in front of body and then removes the tail end
-            // console.log(`${food_x} - ${food_y}`);
             if (this.body[0].x === food_x && this.body[0].y === food_y) {
                 audioPoint.play();
                 foodGen(this);
                 this.score += 10;
-               document.getElementById(`${this.name}`).innerHTML = this.getScore();
+                document.getElementById(`${this.name}`).innerHTML = this.getScore();
             } else {
                 this.body.pop();
             }
           }
 
           changeDirection(event) {    
-            // console.log('KEY PRESSED!');
-            // console.log(event.key);
-                
             if (this.changing_direction) return;   // dont allow reverse direction
-            // console.log('test here');
-            
-            // console.log(this.keyDown);
+
             this.changing_direction = true;
             const keyPressed = event.key;
-            // console.log(this);
             const goingUp = this.dy === -10;    // boolean flag equating to true. axis downwards +ve
             const goingDown = this.dy === 10;
             const goingRight = this.dx === 10;
@@ -89,14 +82,12 @@ $(() => {
                 this.dy = 0;
             }
             if (keyPressed === this.goDown && !goingUp) {
-            //   console.log('TURN DOWN NOW!');
                 this.dx = 0;
                 this.dy = 10;
             }
         }
 
-        gameStatusFlag() {  // figure how to implement inter-player collision detection 
-            // maybe a for loop outside the class and check snake1.body[0] against all of snake2.body
+        gameStatusFlag() {  
             for (let i = 3; i < this.body.length; i++) {  // check for self-collision
              if (this.body[i].x === this.body[0].x && this.body[i].y === this.body[0].y) return true  //checks if snake has hit itself
             }
@@ -108,12 +99,11 @@ $(() => {
             return leftLimit || rightLimit || topLimit || bottomLimit
         }   
 
-        gameStatusFlag_Multi(competitor) {  // figure how to implement inter-player collision detection 
-                            // maybe a for loop outside the class and check snake1.body[0] against all of snake2.body
+        gameStatusFlag_Multi(competitor) {                  
             for (let i = 3; i < this.body.length; i++) {  // check for self-collision
                 if (this.body[i].x === this.body[0].x && this.body[i].y === this.body[0].y) return true  //checks if snake has hit itself
             }
-            // console.log(competitor);
+          
             for (let j = 0; j<competitor.length; j++) {    //check for inter-player collision
                
                 if (this.body[0].x === competitor[j].x && this.body[0].y === competitor[j].y) return true; 
@@ -131,7 +121,7 @@ $(() => {
         }
 
         createScore() {
-            let playerTag = $('<p>').text(`${this.name}`);
+            let playerTag = $('<p>').text(`${this.name}`).addClass("player");
             let p1 = $('<p>').attr('id', `${this.name}`);
             $('#Score').append(playerTag, p1);
             document.getElementById(`${this.name}`).innerHTML = this.getScore();
@@ -140,10 +130,17 @@ $(() => {
         getScore () {
             return this.score;
         }
+
+        removeScore() {
+            let playerTag = $('.player');
+            let p1 = $(`#${this.name}`);
+            playerTag.detach();
+            p1.detach();
+        }
     }
 
-    const snake1 = new Reptile('Player1', 'red', 10, 0, false, 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown', 200, 200);
-    const snake2 = new Reptile('Player2', 'yellow', 10 , 0, false, 'a', 'w', 'd', 's', 100, 100);
+    let snake1 = new Reptile('Player1', 'red', 10, 0, false, 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown', 200, 200);
+    let snake2 = new Reptile('Player2', 'yellow', 10 , 0, false, 'a', 'w', 'd', 's', 100, 100);
 
     const clearCanvas = () => {        // removes the deleted tail from snake's array of objects
         context.fillStyle = 'white';
@@ -199,22 +196,37 @@ $(() => {
 
     const singlePl = document.getElementById("singlePlayer");
     const multiPl = document.getElementById("multiPlayer");
+    const restartgame = document.getElementById("restart");
 
-    singlePl.addEventListener("click", () => {
-        
+    singlePl.addEventListener("click", () => {      
         singleMode();
         console.log("single mode clicked");
     });
 
     multiPl.addEventListener("click", () => {
-
         multiMode();
         console.log("Multiplayer mode clicked");
     });
 
+    restartgame.addEventListener("click", () => {
+        if (gameMode === 2) {
+            snake1 = new Reptile('Player1', 'red', 10, 0, false, 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown', 200, 200);
+            snake2 = new Reptile('Player2', 'yellow', 10 , 0, false, 'a', 'w', 'd', 's', 100, 100);
+            snake1.removeScore();
+            snake2.removeScore();
+            multiMode();
+        }
+        else {
+            snake1 = new Reptile('Player1', 'red', 10, 0, false, 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown', 200, 200);
+            snake1.removeScore();
+            singleMode();
+        }
+    })
+
     const multiMode = () => {
         if (pauseFlag) return;
         else {
+            gameMode = 2;
             snake1.createScore();
             snake2.createScore();
             const multiGame = setInterval(() => {
@@ -231,24 +243,22 @@ $(() => {
 
                 snake2.move_snake();
                 snake2.drawSnake();
-             //   multiMode();
             }, 100) 
         }
         
         
     }
 
-    let sec = 0;
-    // multiMode();
-    setInterval(() => {
-        $('#time-display').text(sec)
-        sec++;
-    },1000)
+    // let sec = 0;
+    // setInterval(() => {
+    //     $('#time-display').text(sec)
+    //     sec++;
+    // },1000)
 
     const singleMode = () => {
-       
         if (pauseFlag) return 
         else {
+            gameMode = 1;
             snake1.createScore();
             const singleGame = setInterval(() => {
                 if (snake1.gameStatusFlag()) {  
@@ -261,10 +271,8 @@ $(() => {
                 snake1.move_snake();
                 snake1.drawSnake();
         
-             //   singleMode();
             }, 100) 
         }
-        
+  
     }
-    // singleMode();
 })
