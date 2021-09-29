@@ -23,7 +23,7 @@ S - Go down
 D - Go right  
 
 # Technologies used:
-- HTML
+- HTML and HTML Canvas element for graphics
 - CSS
 - Javascript
 - Jquery and VanillaJS for DOM manipulation
@@ -53,8 +53,9 @@ D - Go right
 -*-*-*-*-
 # Wishlist:
 - "I'm feeling brave" option with Halloween style jump scare on random points
-- customisable controls
+- Customisable controls
 - Mobile application support
+- Top score feature
 
 
 
