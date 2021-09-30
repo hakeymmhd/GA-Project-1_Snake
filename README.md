@@ -24,7 +24,7 @@ D - Go right
 
 # Technologies used:
 - HTML and HTML Canvas element for graphics
-- CSS
+- CSS and Bootstrap v5.1.1 for styling
 - Javascript
 - Jquery and VanillaJS for DOM manipulation
 
