@@ -3,6 +3,7 @@ console.log("links established");
 $(() => {
     const canvas = document.getElementById("canvas1");
     const context = canvas.getContext("2d");
+    canvas.style.background = "yellow";
     let food_x = 300;
     let food_y = 300; 
     let pauseFlag = true;
@@ -120,10 +121,14 @@ $(() => {
             return this.body;
         }
 
+        createTag() {
+            let playerTag = $('<p>').text(`${this.name}`).addClass("player").addClass("col-md-6");
+            $('#Score').append(playerTag);
+        }
+
         createScore() {
-            let playerTag = $('<p>').text(`${this.name}`).addClass("player");
-            let p1 = $('<p>').attr('id', `${this.name}`);
-            $('#Score').append(playerTag, p1);
+            let p1 = $('<p>').attr('id', `${this.name}`).addClass("col-md-6");
+            $('#Score').append(p1);
             document.getElementById(`${this.name}`).innerHTML = this.getScore();
         } 
         
@@ -143,7 +148,7 @@ $(() => {
     let snake2 = new Reptile('Player2', 'yellow', 10 , 0, false, 'a', 'w', 'd', 's', 100, 100);
 
     const clearCanvas = () => {        // removes the deleted tail from snake's array of objects
-        context.fillStyle = 'white';
+        context.fillStyle = 'grey';
         context.strokestyle = 'black';
         context.fillRect(0, 0, canvas.width, canvas.height);
         context.strokeRect(0, 0, canvas.width, canvas.height);
@@ -227,6 +232,8 @@ $(() => {
         if (pauseFlag) return;
         else {
             gameMode = 2;
+            snake1.createTag();
+            snake2.createTag();
             snake1.createScore();
             snake2.createScore();
             const multiGame = setInterval(() => {
@@ -251,6 +258,7 @@ $(() => {
         if (pauseFlag) return 
         else {
             gameMode = 1;
+            snake1.createTag();
             snake1.createScore();
             const singleGame = setInterval(() => {
                 if (snake1.gameStatusFlag()) {  
