@@ -206,11 +206,13 @@ $(() => {
     singlePl.addEventListener("click", () => {      
         singleMode();
         console.log("single mode clicked");
+        $('#modeDisplay').text("Single player mode selected. Spacebar to start!");
     });
 
     multiPl.addEventListener("click", () => {
         multiMode();
         console.log("Multiplayer mode clicked");
+        $('#modeDisplay').text("Multiplayer mode selected. Spacebar to start!");
     });
 
     restartgame.addEventListener("click", () => {

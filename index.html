@@ -9,11 +9,7 @@
     <script src="./JS/app.js"></script>
     <script src="./JS/main.js"></script>
 
-    
     <title>2D Snake</title>
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/cover/">
-
-    
 
     <!-- Bootstrap core CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">    
@@ -24,32 +20,41 @@
 
 <body class="d-flex h-100 text-center text-white bg-dark">
     <div class="container">
-        <div class="row ">
-            <div class="col-lg-6">
+        <div class="row">
+            <div class="col-md-9">
                 <button type="button" id="singlePlayer" class="btn btn-primary active" role="button" aria-pressed="true">1 Player</button>
             </div>
-            <div class="col-lg-6">
+
+            <div class="col-md-3">
                 <button type="button" id="multiPlayer" class="btn btn-primary active" role="button" aria-pressed="true">2 Players</button>
             </div>
         </div>
         <canvas id="canvas1" width="400" height="400"></canvas>
     
-    
+
         
-        <button id="restart" class="btn btn-success btn-lg">Play Again</button>
-        
-        
-        <div class="row">
-            <div class="col-lg-1">
-                <p>Arrow keys & wasd for multiplayer. Select game mode and hit space to start.</p>
+        <div class="row" id="displayMode">
+            <div class="col-xl-3">
+                <h2 id="modeDisplay"> </h2>
             </div>
-            <div class="col-lg-10">
+            <div class="col-lg-9" id="scoreTag">
                 <h2>Score:</h2>  
                 <div id="Score" class="row">
 
                 </div>      
             </div>
+        </div>
+            
+
+        <div class="row">
+            <div class="col-lg-3" id="gameIns">
+                <img src="Arrow-keys.png" alt="Game instructions" class="rounded float-left" width="600">
+                
+            </div>
+           
         </div> 
+        <button id="restart" class="btn btn-success btn-lg">Play Again</button>
+ 
     </div>
     
 
